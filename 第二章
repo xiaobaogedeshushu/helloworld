@@ -2,3 +2,21 @@
 第一节 字符串类
 标准C++提供了两种字符串，一种是C语言风格的以"\0"字符结尾的字符数组。另一种是字符串类String。而Qt字符串类QString功能更强大。
 QString类保持16位Unicode值，提供了丰富的操作、查询和转换等函数。该类还进行了使用隐式共享、高效的内存分配策略等多方面的优化。
+2.1.1 操作字符串
+字符串有如下几个操作符。
+（1）QString提供了一个二元的“+”操作符用于组合两个字符串，
+并提供了一个“+=”操作符用于将一个字符串追加到另一个字符串的末尾，例如：
+QString str1 = “Welcome”；
+str1 = str1 + ”to you !“;
+QString str2 = "Hello,";
+str2+=“World！”；
+        其中，QString str1 = "Welcome"传递给QString一个const char*类型的ASCII字符串“Welcome”，
+它被解释为一个典型的以“\0”结尾的C类型字符串。这将会导致调用QString构造函数，来初始化
+一个QString字符串。其构造函数原型为：
+        QT_ASCII_CAST_WARN_CONSTRUCTOR QString::QString(const char* str)
+        被传递的const char*类型的指针又将被函数QString::fromAscii()转换为Unicode编码。
+默认情况下，函数QString::fromAscii()会将超过128的字符作为Latin-1进行处理（可以通过调用
+QTextCodec::setCodecForCString()函数改变函数QString::fromAscii()的处理方式）
+        此外，在编译应用程序时，也可以通过定义QT_CAST_FROM_ASCII宏变量屏蔽该构造函数。
+如果程序员要求显示给用户的字符串都必须经过QObject::tr()函数的处理，那么屏蔽QString的这个构造函
+数是非常有用的。
